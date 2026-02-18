@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Order invoice PDF Lambda
+
+Resources:
+    OrderInvoiceFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            Handler: handler.handler
+            Runtime: python3.12
+            CodeUri: .
+            Description: Generate order invoice PDF
+            Environment:
+                Variables:
+                    INVOICE_BUCKET: !Ref InvoiceBucket
+            Policies:
+                - S3CrudPolicy:
+                      BucketName: !Ref InvoiceBucket
+    InvoiceBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+            PublicAccessBlockConfiguration:
+                BlockPublicAcls: true
+                BlockPublicPolicy: true
+                IgnorePublicAcls: true
+                RestrictPublicBuckets: true
+
+Outputs:
+    OrderInvoiceFunctionArn:
+        Value: !GetAtt OrderInvoiceFunction.Arn
+    OrderInvoiceFunctionName:
+        Value: !Ref OrderInvoiceFunction

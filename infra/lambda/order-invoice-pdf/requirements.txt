@@ -1,0 +1,2 @@
+# Add reportlab or weasyprint for PDF generation when needed
+# boto3 is provided by Lambda runtime
